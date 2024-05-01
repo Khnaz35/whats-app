@@ -2,7 +2,8 @@ name: whatsapp-env
 channels:
   - defaults
 dependencies:
-  - python=3.11  
-  - selenium     
+  - python=3.11
+  - selenium
+  - pip
   - pip:
-    - urllib3    
+    - urllib3
