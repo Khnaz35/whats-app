@@ -1,0 +1,10 @@
+name: whatsapp-env
+channels:
+  - defaults
+dependencies:
+  - python=3.11  # Ensuring compatibility with your GitHub Actions setup
+  - selenium
+  - pip:
+    - urllib3
+    - csv
+    - logging
