@@ -10,25 +10,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python 3.11.7
-      uses: actions/setup-python@v3
-      with:
-        python-version: '3.11.7'
 
-    - name: Add conda to system path
+    - name: Install Miniconda
       run: |
-        echo $CONDA/bin >> $GITHUB_PATH
+        wget https://repo.anaconda.com/miniconda/Miniconda3-py39_4.9.2-Linux-x86_64.sh -O miniconda.sh
+        bash miniconda.sh -b -p $HOME/miniconda
+        echo "$HOME/miniconda/bin" >> $GITHUB_PATH
+        source $HOME/miniconda/bin/activate
+        conda update -y conda
+
+    - name: Set up Python 3.11.7
+      run: |
+        conda install python=3.11.7
 
     - name: Initialize Conda
       run: conda init bash
 
-    - name: Install dependencies
+    - name: Install dependencies without plugins
       run: |
-        sudo chown -R $USER:$USER $CONDA  # Ensure the user has ownership of the conda directories
-        conda env update --file environment.yml --name base --verbose --debug
+        CONDA_NO_PLUGINS=true conda env update --file environment.yml --name base --verbose --debug
 
     - name: Activate Conda environment
-      run: echo "source activate base" >> $GITHUB_ENV
+      run: echo "conda activate base" >> $GITHUB_ENV
 
     - name: Check Python version
       run: |
