@@ -21,7 +21,7 @@ jobs:
       run: conda init bash
     - name: Install dependencies
       run: |
-        conda env update --file environment.yml --name base --verbose
+        conda env update --file environment.yml --name base --verbose --debug
     - name: Activate Conda environment
       run: echo "source activate base" >> $GITHUB_ENV
     - name: Check Python version
