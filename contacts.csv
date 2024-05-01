@@ -1,0 +1,3 @@
+FirstName,LastName,Phone,Message
+Ali,Ahmed,1121121787,"Dear {%S first name last name}, take note that your class will start today at 7:45pm via online https://google-meet.com"
+John,Doe,123456789,"Dear {%S first name last name}, take note that your class will start today at 7:45pm via online https://google-meet.com"
