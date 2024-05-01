@@ -14,24 +14,38 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: '3.11.7'
+
     - name: Add conda to system path
       run: |
         echo $CONDA/bin >> $GITHUB_PATH
+
     - name: Initialize Conda
       run: conda init bash
+
     - name: Install dependencies
       run: |
+        sudo chown -R $USER:$USER $CONDA  # Ensure the user has ownership of the conda directories
         conda env update --file environment.yml --name base --verbose --debug
+
     - name: Activate Conda environment
       run: echo "source activate base" >> $GITHUB_ENV
+
     - name: Check Python version
-      run: python --version
+      run: |
+        python --version
+        which python  # Ensure the correct Python executable is used
+
     - name: Lint with flake8
       run: |
         conda install flake8
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
     - name: Test with pytest
       run: |
         conda install pytest
         pytest
+
+    - name: Check file permissions
+      run: |
+        ls -lha  # List files in the current directory to check their permissions
