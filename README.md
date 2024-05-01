@@ -1,31 +1,43 @@
-# Whatsapp-Bulk-Messenger
+# Whatsapp Bulk Messenger
 
-Whatsapp Bulk Messenger automates sending of messages via Whatsapp Web. The tool can you used to send whatsapp message in bulk. Program uses runs through a list of numbers provided in numbers.txt and then tries to send a prediefined (but templated) message to each number in the list. It can also read other columns from the number csv to populate template specific words and then send out a personalized message to the number
+Whatsapp Bulk Messenger is a tool designed to automate the sending of messages through Whatsapp Web. It enables the bulk sending of templated messages, which can be personalized using data from a CSV file. Each message is tailored using specific information associated with a contact number, enhancing the personal touch of your communications.
 
-Note: The current program is limited to sending only TEXT message
+## Features
 
-Note: Another version of similar project will be available which supports sending media and documents along with text. Please reach out to me on [email](mailto:khnaz35@gmail.com) for more enquiry.
+- **Bulk Messaging:** Send messages to multiple recipients automatically.
+- **Message Personalization:** Utilize additional CSV data to personalize messages for each contact.
+- **Text-Only Support:** Currently, the tool supports sending text messages only.
 
-# Requirements
+> **Note:** A future version will support media and document attachments. For more details, contact me at [khnaz35@gmail.com](mailto:khnaz35@gmail.com).
 
-*  Python >= 3.11.0
-*  Chrome canary headless is installed by the program automatically
+## Requirements
 
-# Setup
+- Python 3.11.0 or newer
+- Chrome Canary (The tool installs this automatically in headless mode)
 
-1. Install python - >=v3.6
-2. Run `pip install -r requirements.txt`
+## Setup
 
-# Steps
+1. Ensure Python version 3.6 or higher is installed.
+2. Install required Python packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-1. Enter the message you want to send inside `contacts.csv` file.
-2. Run `python auto.py`.
-3. Once the program starts, it will log the info in whatsapp_messenger.log you'll see the new log file created when you run this tool.
-4. After a while, Chrome canary should pop-up and open web.whatsapp.com.
-5. Scan the QR code to login into whatsapp.
-6. Press `Enter` to start sending out messages.
-7. Sit back and relax!
+## Usage
 
-### Funding
+1. Populate the `contacts.csv` file with the message details and contact numbers.
+2. Execute the script:
+   ```bash
+   python auto.py
+   ```
+3. Follow on-screen instructions to log into Whatsapp Web using a QR code.
+4. Press `Enter` to initiate message sending.
+5. Monitor the progress in `whatsapp_messenger.log`.
 
-If you like this tool, I'd appreciate it if you could make a donation via [Buy Me a Coffee](https://buymeacoffee.com/khnaz35).
+### Logging
+
+Logs are maintained in `whatsapp_messenger.log`, tracking both routine operations and errors. The log files rotate after reaching 10 MB to save space and avoid overloading.
+
+## Support
+
+If you find this tool helpful and would like to support its development, consider making a donation through [Buy Me a Coffee](https://buymeacoffee.com/khnaz35).
