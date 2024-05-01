@@ -19,12 +19,20 @@ jobs:
         source $HOME/miniconda/bin/activate
         conda update -y conda
 
-    - name: Set up Python 3.11.7
+    - name: Install Mamba
       run: |
-        conda install python=3.11.7
+        conda install mamba -n base -c conda-forge
+
+    - name: Set Up Python 3.11.7
+      run: |
+        mamba install python=3.11.7
 
     - name: Initialize Conda
       run: conda init bash
+
+    - name: Configure Conda to Use libmamba
+      run: |
+        conda config --set solver libmamba
 
     - name: Install dependencies without plugins
       run: |
@@ -36,7 +44,7 @@ jobs:
     - name: Check Python version
       run: |
         python --version
-        which python  # Ensure the correct Python executable is used
+        which python
 
     - name: Lint with flake8
       run: |
@@ -51,4 +59,4 @@ jobs:
 
     - name: Check file permissions
       run: |
-        ls -lha  # List files in the current directory to check their permissions
+        ls -lha
