@@ -14,6 +14,7 @@ Whatsapp Bulk Messenger is a tool designed to automate the sending of messages t
 
 - Python 3.11.0 or newer
 - Chrome Canary (The tool installs this automatically in headless mode)
+- if need to download the driver manually can be downloaded from here : [Chrome-drivers](https://sites.google.com/chromium.org/driver/)
 
 ## Setup
 
