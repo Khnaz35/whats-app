@@ -113,16 +113,35 @@ def send_message(driver, contact, delay, retry_attempts):
     personalized_message = contact['Message'].replace("{%S first name last name}", f"{contact['FirstName']} {contact['LastName']}")
     message = quote(personalized_message)
     phone_number = contact['Phone']
+    attachment_path = contact.get('AttachmentPath', '').strip()
     
     logger.info(f'Starting to send message to {phone_number}.')
     url = f'https://web.whatsapp.com/send?phone={phone_number}&text={message}'
     for attempt in range(retry_attempts):
         try:
             driver.get(url)
+            sleep(random.uniform(config['min_sleep_time'], config['max_sleep_time']))  # Random delay before interacting
+
+            # If there is an attachment, handle it
+            if attachment_path:
+                # Click the attach button
+                attach_btn = WebDriverWait(driver, delay).until(EC.element_to_be_clickable((By.XPATH, '//div[@title="Attach"]')))
+                attach_btn.click()
+                sleep(random.uniform(config['min_sleep_time'], config['max_sleep_time']))  # Random delay after opening the attachment dialog
+
+                # Select "Photos & videos" option and upload the file
+                file_input = WebDriverWait(driver, delay).until(
+                    EC.presence_of_element_located((By.XPATH, '//input[@accept="image/*,video/mp4,video/3gpp,video/quicktime"]'))
+                )
+                file_input.send_keys(attachment_path)
+                sleep(random.uniform(config['min_sleep_time'], config['max_sleep_time']))  # Random delay after uploading the file
+
+            # Ensure the send button is clickable and send the message
+            send_button = WebDriverWait(driver, delay).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div/div[2]/div[2]/div[2]/span/div/div/div/div[2]/div/div[2]/div[2]'))
+            )
             sleep(random.uniform(config['min_sleep_time'], config['max_sleep_time']))  # Random delay before clicking the button
-            click_btn = WebDriverWait(driver, delay).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="main"]/footer/div[1]/div/span[2]/div/div[2]/div[2]')))
-            sleep(random.uniform(config['min_sleep_time'], config['max_sleep_time']))  # Random delay before clicking the button
-            click_btn.click()
+            send_button.click()
             sleep(random.uniform(config['min_sleep_time'], config['max_sleep_time']))  # Random delay after sending the message
             logger.info(f'Message successfully sent to {phone_number}.')
             return True

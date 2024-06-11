@@ -194,3 +194,6 @@ starterkit/_keenthemes/src/**/webpack
 /.DS_Store
 #csv file
 contacts-1.csv
+
+#images folder
+attachments

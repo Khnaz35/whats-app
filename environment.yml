@@ -1,9 +1,15 @@
-name: whatsapp-env
-channels:
-  - defaults
-dependencies:
-  - python=3.11.7
-  - selenium
-  - pip
-  - pip:
-    - urllib3
+# environment.yml
+chrome_binary_location: "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary"
+user_data_dir: "/var/tmp/chrome_user_data"
+contacts_file: "contacts.csv"
+log_file: "whatsapp_messenger.log"
+delay: 30
+max_log_size: 10485760  # 10 * 1024 * 1024
+log_backup_count: 5
+retry_attempts: 3
+headless: false
+min_sleep_time: 1
+max_sleep_time: 5
+logging:
+  level: "INFO"
+  format: '%(asctime)s - %(levelname)s - %(message)s'
