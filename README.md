@@ -1,5 +1,3 @@
----
-
 # Whatsapp Bulk Messenger
 
 Whatsapp Bulk Messenger is a tool designed to automate the sending of messages through Whatsapp Web. It enables the bulk sending of templated messages, which can be personalized using data from a CSV file. Each message is tailored using specific information associated with a contact number, enhancing the personal touch of your communications.
@@ -72,8 +70,18 @@ min_sleep_time: 2
 max_sleep_time: 5
 ```
 
+## Disclaimer
+
+This tool is intended for educational and personal use only. The developer is not responsible for any misuse of this tool, including but not limited to spamming, harassment, or any violations of WhatsApp's terms of service. Use this tool responsibly and ensure you have permission to contact each recipient.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
 ## Support
 
 If you find this tool helpful and would like to support its development, consider making a donation through [Buy Me a Coffee](https://buymeacoffee.com/khnaz35).
 
----
+### LICENSE
+
+The source code is licensed under the MIT license, which you can find in the MIT-LICENSE.txt file.
