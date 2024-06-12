@@ -194,9 +194,12 @@ starterkit/_keenthemes/src/**/webpack
 /.DS_Store
 #csv file
 contacts-1.csv
+contacts-1-sample.csv
+contacts-cleaned.csv
 
 #images folder
 attachments
 
 #custom files
 data-clean-help.md
+data-clean.py
