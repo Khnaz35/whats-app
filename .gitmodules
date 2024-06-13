@@ -1,0 +1,3 @@
+[submodule "private-submodule"]
+	path = private-submodule
+	url = git@github.com:Khnaz35/private-whats-app.git
