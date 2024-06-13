@@ -196,6 +196,8 @@ starterkit/_keenthemes/src/**/webpack
 contacts-1.csv
 contacts-1-sample.csv
 contacts-cleaned.csv
+cfmn.csv
+cfmn-backup.csv
 
 #images folder
 attachments
@@ -203,3 +205,6 @@ attachments
 #custom files
 data-clean-help.md
 data-clean.py
+check.py
+data-format.py
+permission.py

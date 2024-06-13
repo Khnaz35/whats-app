@@ -54,7 +54,6 @@ def get_compatible_chromedriver_version(chrome_version):
         response = requests.get(url)
         if response.status_code == 200:
             versions_info = response.json()
-            logger.info(f"API Response: {versions_info}")  # Log the entire response payload for debugging
             if major_version in versions_info["milestones"]:
                 chromedriver_info = versions_info["milestones"][major_version]["downloads"]["chromedriver"]
                 for entry in chromedriver_info:
@@ -88,7 +87,21 @@ def initialize_driver():
         logger.info('WebDriver Manager cache cleared.')
 
     # Automatically download the correct ChromeDriver version for Chrome Canary
-    service = Service(ChromeDriverManager(driver_version=chromedriver_version).install())
+    driver_path = ChromeDriverManager(driver_version=chromedriver_version).install()
+    logger.info(f"ChromeDriver path: {driver_path}")
+
+    # Correct the driver path if it points to the wrong file
+    correct_driver_path = os.path.join(os.path.dirname(driver_path), 'chromedriver')
+    if not os.path.exists(correct_driver_path):
+        for file in os.listdir(os.path.dirname(driver_path)):
+            if 'chromedriver' in file and os.access(os.path.join(os.path.dirname(driver_path), file), os.X_OK):
+                correct_driver_path = os.path.join(os.path.dirname(driver_path), file)
+                break
+
+    logger.info(f"Correct ChromeDriver path: {correct_driver_path}")
+
+    # Set the executable permission for the correct driver path
+    os.chmod(correct_driver_path, 0o755)
 
     options = Options()
     options.binary_location = config['chrome_binary_location']
@@ -97,26 +110,46 @@ def initialize_driver():
     options.add_argument(f"--user-data-dir={config['user_data_dir']}")
     os.environ["WDM_LOG_LEVEL"] = "0"
 
+    service = Service(correct_driver_path)
+
     driver = webdriver.Chrome(service=service, options=options)
     logger.info('Web driver initialized, navigating to WhatsApp Web.')
     driver.get('https://web.whatsapp.com')
     return driver
 
 def load_contacts(file_path):
-    with open(file_path, mode='r', encoding='utf8') as file:
-        csv_reader = csv.DictReader(file)
-        contacts = list(csv_reader)
-    logger.info(f'Loaded {len(contacts)} contacts from CSV.')
-    return contacts
+    encodings = ['utf-8', 'latin1', 'iso-8859-1']
+    for encoding in encodings:
+        try:
+            with open(file_path, mode='r', encoding=encoding) as file:
+                csv_reader = csv.DictReader(file)
+                contacts = list(csv_reader)
+            logger.info(f'Loaded {len(contacts)} contacts from CSV with encoding {encoding}.')
+            return contacts
+        except UnicodeDecodeError as e:
+            logger.error(f"Error reading {file_path} with encoding {encoding}: {e}")
+    raise UnicodeDecodeError(f"Unable to read {file_path} with any of the attempted encodings: {encodings}")
+
+def normalize_keys(contact):
+    return {k.lower(): v for k, v in contact.items()}
 
 def send_message(driver, contact, delay, retry_attempts):
-    personalized_message = contact['Message'].replace("{%S first name last name}", f"{contact['FirstName']} {contact['LastName']}")
-    message = quote(personalized_message)
-    phone_number = contact['Phone']
-    attachment_path = contact.get('AttachmentPath', '').strip()
+    contact = normalize_keys(contact)
+    try:
+        first_name = contact['firstname']
+        last_name = contact['lastname']
+        message = contact['message']
+    except KeyError as e:
+        logger.error(f"Missing key {e} in contact {contact}")
+        return False
+
+    personalized_message = message.replace("{%S first name last name}", f"{first_name} {last_name}")
+    encoded_message = quote(personalized_message, safe='')  # Ensure special characters and emojis are properly encoded
+    phone_number = contact['phone']
+    attachment_path = contact.get('attachmentpath', '').strip()
     
     logger.info(f'Starting to send message to {phone_number}.')
-    url = f'https://web.whatsapp.com/send?phone={phone_number}&text={message}'
+    url = f'https://web.whatsapp.com/send?phone={phone_number}&text={encoded_message}'
     for attempt in range(retry_attempts):
         try:
             driver.get(url)
